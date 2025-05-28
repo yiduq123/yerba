@@ -64,7 +64,7 @@ getgenv().Krylon = {
         },
     
         ['Hit Location'] = {
-            ['Type'] = 'Closest Part', -- [[ Closest Part or Closest Point ]]
+            ['Type'] = 'Closest Point', -- [[ Closest Part or Closest Point ]]
             ['Parts'] = {'Head', 'UpperTorso', 'HumanoidRootPart', 'LowerTorso', 'LeftHand', 'RightHand', 'LeftLowerArm', 'RightLowerArm', 'LeftUpperArm', 'RightUpperArm', 'LeftFoot', 'LeftLowerLeg',  'LeftUpperLeg', 'RightLowerLeg', 'RightFoot',  'RightUpperLeg'}
         },
     
@@ -75,7 +75,7 @@ getgenv().Krylon = {
         }
     },
     ['Trigger bot'] = {
-        ['Enabled'] = true,
+        ['Enabled'] = false,
         ['Prediction'] = 0,
         ['Weapons'] = {
             '[Double-Barrel SG]',
@@ -95,7 +95,7 @@ getgenv().Krylon = {
         },
         ['Custom Size'] = {
             ['Enabled'] = true, 
-            ['Value'] = 3
+            ['Value'] = 5
         },
     },
     ['Range'] = {
