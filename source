@@ -75,7 +75,7 @@ getgenv().Krylon = {
         }
     },
     ['Trigger bot'] = {
-        ['Enabled'] = false,
+        ['Enabled'] = true,
         ['Prediction'] = 0,
         ['Weapons'] = {
             '[Double-Barrel SG]',
@@ -83,7 +83,7 @@ getgenv().Krylon = {
             '[TacticalShotgun]'
         },
         ['Keybind'] = {
-            ['Bind'] = 'T',
+            ['Bind'] = 'X',
             ['Keybind Mode'] = 'Toggle' -- hold or toggle
         },
         ['Delay'] = {    
