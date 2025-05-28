@@ -90,7 +90,7 @@ getgenv().Krylon = {
             ['Value'] = 0.01,
         },
         ['HitParts'] = {
-            ['Type'] = false,
+            ['Type'] = true,
             ['Parts'] = {'Head', 'UpperTorso', 'HumanoidRootPart', 'LowerTorso', 'LeftHand', 'RightHand', 'LeftLowerArm', 'RightLowerArm', 'LeftUpperArm', 'RightUpperArm', 'LeftFoot', 'LeftLowerLeg',  'LeftUpperLeg', 'RightLowerLeg', 'RightFoot',  'RightUpperLeg'}
         },
         ['Custom Size'] = {
