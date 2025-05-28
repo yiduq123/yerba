@@ -196,7 +196,7 @@ local function showConsole()
     titleText2.BackgroundTransparency = 1
     titleText2.Size                   = UDim2.new(1, -100, 1, 0)
     titleText2.Position               = UDim2.new(0, 28, 0, 0)
-    titleText2.Text                   = "Administrator: teccaware"
+    titleText2.Text                   = "Administrator: niggerware"
     titleText2.Font                   = Enum.Font.SourceSans
     titleText2.TextColor3             = Color3.fromRGB(255, 255, 255)
     titleText2.TextSize               = 16
@@ -320,7 +320,7 @@ local function showConsole()
     creditsLabel.Size                   = UDim2.new(1, 0, 0, 20)
     creditsLabel.Position               = UDim2.new(0, -180, 0, 150)
     creditsLabel.Font                   = Enum.Font.Code
-    creditsLabel.Text                   = "Credits to Bino Xan and Solary"
+    creditsLabel.Text                   = "Credits to me, nigga"
     creditsLabel.TextColor3             = Color3.fromRGB(180, 180, 180)
     creditsLabel.TextSize               = 12
     creditsLabel.TextXAlignment         = Enum.TextXAlignment.Center
@@ -449,10 +449,10 @@ local function showConsole()
         if enterPressed then
             if typedKey == correctKey then
                 isAuthenticating = true
-                keyLabel2.Text = '[<font color="rgb(255,0,0)">-</font>] Authenticating Your <font color="rgb(255,0,0)">teccaware</font> Key...'
+                keyLabel2.Text = '[<font color="rgb(255,0,0)">-</font>] Authenticating Your <font color="rgb(255,0,0)">niggerware</font> Key...'
                 wait(authDelay)
                 repeat task.wait() until otherThingLoaded
-                keyLabel2.Text = '[<font color="rgb(255,0,0)">-</font>] Hiding <font color="rgb(255,0,0)">teccaware</font> Console From The Game <font color="rgb(255,0,0)">3.00</font> seconds'
+                keyLabel2.Text = '[<font color="rgb(255,0,0)">-</font>] Hiding <font color="rgb(255,0,0)">niggerware</font> Console From The Game <font color="rgb(255,0,0)">3.00</font> seconds'
                 wait(hideDelay)
 
                 -- Log sequence
@@ -468,7 +468,7 @@ local function showConsole()
                 wait(1)
                 addLog("Your Game is Now Loaded.")
                 wait(3)
-                addLog("teccaware Fully Injected!")
+                addLog("niggerware Fully Injected!")
                 wait(1)
 
                 fadeOutFrame(frame2, 2)
@@ -477,7 +477,7 @@ local function showConsole()
 
                 accessGranted = true
             else
-                keyLabel2.Text = '[<font color="rgb(255,0,0)">-</font>] Your teccaware Key is Invalid'
+                keyLabel2.Text = '[<font color="rgb(255,0,0)">-</font>] Your niggerware Key is Invalid'
                 wait(3)
                 inputBox.Text = ""
                 typedKey = ""
