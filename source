@@ -1,0 +1,1404 @@
+
+
+getgenv().Krylon = {
+    ['Core'] = {
+        ['Version'] = 'v1.0',
+    },
+    ['Silent Aim'] = {
+        ['Enabled'] = true,
+        ['Checks'] = {'Wall', 'Knocked', 'Grabbed', 'Vehicle'}, -- [[ Wall, Knocked, Grabbed, Vehicle ]]
+        ['Keybind'] = 'P',
+        ['Hit Location'] = {
+            ['Type'] = 'Closest Part', -- [[ Closest Part or Closest Point ]]
+            ['Parts'] = {'Head', 'UpperTorso', 'HumanoidRootPart', 'LowerTorso', 'LeftHand', 'RightHand', 'LeftLowerArm', 'RightLowerArm', 'LeftUpperArm', 'RightUpperArm', 'LeftFoot', 'LeftLowerLeg',  'LeftUpperLeg', 'RightLowerLeg', 'RightFoot',  'RightUpperLeg'} --- you can put more than one parts
+        },
+        ['Fov'] = {
+            ['Enabled'] = true,
+                ['Value'] = 7,
+                ['Show Fov'] = true,
+        },
+        ['Prediction'] = {
+            ['Sets'] = {
+                ["Low"] = 0,
+                ["Medium"] = 0,
+                ["High"] = 0,
+                ["Extreme"] = 0,
+
+            }
+        },
+    },
+    ['Target Aim'] = {
+        ['Enabled'] = false,
+        ['Checks'] = {'Wall', 'Knocked', 'Grabbed', 'Vehicle'},
+        ['Keybind'] = 'Q',
+        ['Hit Location'] = {
+            ['Type'] = 'Closest Point', -- [[ Closest Part or Closest Point ]]
+            ['Parts'] = {'Head', 'UpperTorso', 'HumanoidRootPart', 'LowerTorso', 'LeftHand', 'RightHand', 'LeftLowerArm', 'RightLowerArm', 'LeftUpperArm', 'RightUpperArm', 'LeftFoot', 'LeftLowerLeg',  'LeftUpperLeg', 'RightLowerLeg', 'RightFoot',  'RightUpperLeg'} --- you can put more than one parts
+        },
+        ['Fov'] = {
+            ['Enabled'] = true,
+                ['Value'] = 8.5,
+                ['Show Fov'] = false,
+        },
+        ['Prediction'] = {
+            ['Sets'] = {
+                ["Low"] = 0,
+                ["Medium"] = 0,
+                ["High"] = 0,
+                ["Extreme"] = 0,
+
+            }
+        },
+    },
+    ['Camlock'] = {
+        ['Enabled'] = true,
+        ['Keybind'] = 'C',
+        ['Checks'] = {'Wall', 'Knocked', 'Grabbed', 'Vehicle'},
+        ['Fov'] = 10,
+        ['Show Fov'] = false,
+        
+        ['Value'] = {
+            ['Snappiness'] = 0.059,
+            ['ThirdPerson'] = false,
+            ['FirstPerson'] = true, 
+        },
+    
+        ['Hit Location'] = {
+            ['Type'] = 'Closest Part', -- [[ Closest Part or Closest Point ]]
+            ['Parts'] = {'Head', 'UpperTorso', 'HumanoidRootPart', 'LowerTorso', 'LeftHand', 'RightHand', 'LeftLowerArm', 'RightLowerArm', 'LeftUpperArm', 'RightUpperArm', 'LeftFoot', 'LeftLowerLeg',  'LeftUpperLeg', 'RightLowerLeg', 'RightFoot',  'RightUpperLeg'}
+        },
+    
+        ['Prediction'] = {  
+            ['Low'] = 0, 
+            ['Medium'] = 0, 
+            ['High'] = 0 
+        }
+    },
+    ['Trigger bot'] = {
+        ['Enabled'] = false,
+        ['Prediction'] = 0,
+        ['Weapons'] = {
+            '[Double-Barrel SG]',
+            '[Revolver]',
+            '[TacticalShotgun]'
+        },
+        ['Keybind'] = {
+            ['Bind'] = 'T',
+            ['Keybind Mode'] = 'Toggle' -- hold or toggle
+        },
+        ['Delay'] = {    
+            ['Value'] = 0.01,
+        },
+        ['HitParts'] = {
+            ['Type'] = false,
+            ['Parts'] = {'Head', 'UpperTorso', 'HumanoidRootPart', 'LowerTorso', 'LeftHand', 'RightHand', 'LeftLowerArm', 'RightLowerArm', 'LeftUpperArm', 'RightUpperArm', 'LeftFoot', 'LeftLowerLeg',  'LeftUpperLeg', 'RightLowerLeg', 'RightFoot',  'RightUpperLeg'}
+        },
+        ['Custom Size'] = {
+            ['Enabled'] = true, 
+            ['Value'] = 13
+        },
+    },
+    ['Range'] = {
+        ['Enabled'] = true, --- how far you want them to sense someone
+        ['Silent Aim'] = 250,
+        ['Camlock'] = 250,
+        ['Trigger bot'] = 250
+    },
+    ['Speed Modifications'] = {
+        ['Options'] = {
+            ['Enabled'] = false, -- reset before working
+            ['DefaultSpeed'] = 35,
+            ['ToggleMode'] = false, -- if you want togglemovement to work
+            ['Keybinds'] = {
+                ['ToggleMovement'] = 'V',
+                ['Speed +5'] = 'M',
+                ['Speed -5'] = 'N'
+            }
+        }
+    },
+    ['Spread modifications'] = { 
+        ['Mode'] = "Randomizer", -- Normal or Randomizer
+        ['Spread Modifier'] = {
+            Multiplier = 0.1
+        },
+        ['Spread Randomizer'] = {
+            Start = 1,
+            End = 1
+        },
+        ['Enabled'] = false,
+        ['Toggle Key'] = "G"
+    },
+}
+
+local correctKey = script_key
+
+local Players          = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local TweenService     = game:GetService("TweenService")
+
+-- “Intro finished” signal
+local introFinishedEvent = Instance.new("BindableEvent")
+
+local function showConsole()
+    -- Auth vars
+    local accessGranted    = false
+    local otherThingLoaded = false
+    math.randomseed(tick())
+    local pid = math.random(10000, 99999)
+
+    task.spawn(function()
+        wait(1)
+        otherThingLoaded = true
+    end)
+
+    -- Build the console GUI
+    local screenGui2 = Instance.new("ScreenGui")
+    screenGui2.Name   = "CST"
+    screenGui2.Parent = game.CoreGui
+
+    local frame2 = Instance.new("Frame")
+    frame2.Name             = "MoozeFrame"
+    frame2.Parent           = screenGui2
+    frame2.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+    frame2.Size             = UDim2.new(0, 600, 0, 300)
+    frame2.Position         = UDim2.new(0.5, -300, 0.5, -150)
+    frame2.ClipsDescendants = true
+
+    local cornerMain = Instance.new("UICorner")
+    cornerMain.CornerRadius = UDim.new(0, 8)
+    cornerMain.Parent       = frame2
+
+    -- Title Bar
+    local titleBar2 = Instance.new("Frame")
+    titleBar2.Name             = "TitleBar"
+    titleBar2.Parent           = frame2
+    titleBar2.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    titleBar2.BorderSizePixel  = 0
+    titleBar2.Size             = UDim2.new(1, 0, 0, 28)
+    titleBar2.Position         = UDim2.new(0, 0, 0, 0)
+    titleBar2.Active           = true
+
+    local cornerTitle = Instance.new("UICorner")
+    cornerTitle.CornerRadius = UDim.new(0, 8)
+    cornerTitle.Parent       = titleBar2
+
+    local icon2 = Instance.new("ImageLabel")
+    icon2.Name                   = "TitleIcon"
+    icon2.Parent                 = titleBar2
+    icon2.BackgroundTransparency = 1
+    icon2.Size                   = UDim2.new(0, 18, 0, 18)
+    icon2.Position               = UDim2.new(0, 6, 0, 6)
+    icon2.Image                  = "rbxassetid://95413852871898"
+
+    local titleText2 = Instance.new("TextLabel")
+    titleText2.Name                   = "TitleText"
+    titleText2.Parent                 = titleBar2
+    titleText2.BackgroundTransparency = 1
+    titleText2.Size                   = UDim2.new(1, -100, 1, 0)
+    titleText2.Position               = UDim2.new(0, 28, 0, 0)
+    titleText2.Text                   = "Administrator: Krylon"
+    titleText2.Font                   = Enum.Font.SourceSans
+    titleText2.TextColor3             = Color3.fromRGB(255, 255, 255)
+    titleText2.TextSize               = 16
+    titleText2.TextXAlignment         = Enum.TextXAlignment.Left
+
+    local closeButton2 = Instance.new("TextButton")
+    closeButton2.Name                   = "CloseButton"
+    closeButton2.Parent                 = titleBar2
+    closeButton2.Size                   = UDim2.new(0, 40, 0, 28)
+    closeButton2.Position               = UDim2.new(1, -40, 0, 0)
+    closeButton2.BackgroundTransparency = 1
+    closeButton2.Text                   = "X"
+    closeButton2.Font                   = Enum.Font.SourceSansBold
+    closeButton2.TextColor3             = Color3.fromRGB(255, 255, 255)
+    closeButton2.TextSize               = 18
+
+    local minimizeButton2 = Instance.new("TextButton")
+    minimizeButton2.Name                   = "MinimizeButton"
+    minimizeButton2.Parent                 = titleBar2
+    minimizeButton2.Size                   = UDim2.new(0, 40, 0, 28)
+    minimizeButton2.Position               = UDim2.new(1, -120, 0, 0)
+    minimizeButton2.BackgroundTransparency = 1
+    minimizeButton2.Text                   = "-"
+    minimizeButton2.Font                   = Enum.Font.SourceSansBold
+    minimizeButton2.TextColor3             = Color3.fromRGB(255, 255, 255)
+    minimizeButton2.TextSize               = 24
+
+    local maximizeButton2 = Instance.new("TextButton")
+    maximizeButton2.Name                   = "MaximizeButton"
+    maximizeButton2.Parent                 = titleBar2
+    maximizeButton2.Size                   = UDim2.new(0, 40, 0, 28)
+    maximizeButton2.Position               = UDim2.new(1, -80, 0, 0)
+    maximizeButton2.BackgroundTransparency = 1
+    maximizeButton2.Text                   = "▢"
+    maximizeButton2.Font                   = Enum.Font.SourceSansBold
+    maximizeButton2.TextColor3             = Color3.fromRGB(255, 255, 255)
+    maximizeButton2.TextSize               = 18
+
+    -- Dragging logic (unchanged)
+    do
+        local dragging, dragInput, dragStart, startPos
+        local function update(input)
+            local delta = input.Position - dragStart
+            frame2.Position = UDim2.new(
+                frame2.Position.X.Scale, startPos.X.Offset + delta.X,
+                frame2.Position.Y.Scale, startPos.Y.Offset + delta.Y
+            )
+        end
+        titleBar2.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                dragging  = true
+                dragStart = input.Position
+                startPos  = frame2.Position
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then
+                        dragging = false
+                    end
+                end)
+            end
+        end)
+        titleBar2.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement then
+                dragInput = input
+            end
+        end)
+        UserInputService.InputChanged:Connect(function(input)
+            if dragging and input == dragInput then
+                update(input)
+            end
+        end)
+    end
+
+    -- Minimize / Maximize / Close
+    local normalSize, normalVisible = frame2.Size, true
+    minimizeButton2.MouseButton1Click:Connect(function()
+        if normalVisible then
+            TweenService:Create(frame2, TweenInfo.new(0.2), {
+                Size = UDim2.new(normalSize.X.Scale, normalSize.X.Offset, 0, titleBar2.Size.Y.Offset)
+            }):Play()
+            maximizeButton2.Visible = true
+            normalVisible = false
+        end
+    end)
+    maximizeButton2.MouseButton1Click:Connect(function()
+        if not normalVisible then
+            TweenService:Create(frame2, TweenInfo.new(0.2), { Size = normalSize }):Play()
+            maximizeButton2.Visible = false
+            normalVisible = true
+        end
+    end)
+    closeButton2.MouseButton1Click:Connect(function()
+        screenGui2:Destroy()
+    end)
+
+    -- ASCII & Key Labels
+    local textLabel2 = Instance.new("TextLabel")
+    textLabel2.Name                   = "MoozeASCII"
+    textLabel2.Parent                 = frame2
+    textLabel2.BackgroundTransparency = 1
+    textLabel2.Size                   = UDim2.new(1, 0, 0.8, 0)
+    textLabel2.Position               = UDim2.new(0.007, 0, -0.1, 0)
+    textLabel2.Font                   = Enum.Font.Code
+    textLabel2.Text                   =[[
+oooo    oooo ooooooooo.   oooooo   oooo ooooo          .oooooo.   ooooo      ooo 
+`888   .8P'  `888   `Y88.  `888.   .8'  `888'         d8P'  `Y8b  `888b.     `8' 
+ 888  d8'     888   .d88'   `888. .8'    888         888      888  8 `88b.    8  
+ 88888[       888ooo88P'     `888.8'     888         888      888  8   `88b.  8  
+ 888`88b.     888`88b.        `888'      888         888      888  8     `88b.8  
+ 888  `88b.   888  `88b.       888       888       o `88b    d88'  8       `888  
+o888o  o888o o888o  o888o     o888o     o888ooooood8  `Y8bood8P'  o8o        `8  
+]]
+    textLabel2.TextColor3     = Color3.fromRGB(128, 128, 128)
+    textLabel2.TextSize       = 13
+    textLabel2.TextWrapped    = true
+    textLabel2.TextXAlignment = Enum.TextXAlignment.Center
+    textLabel2.TextYAlignment = Enum.TextYAlignment.Center
+
+    local creditsLabel = Instance.new("TextLabel")
+    creditsLabel.Name                   = "CreditsLabel"
+    creditsLabel.Parent                 = frame2
+    creditsLabel.BackgroundTransparency = 1
+    creditsLabel.Size                   = UDim2.new(1, 0, 0, 20)
+    creditsLabel.Position               = UDim2.new(0, -180, 0, 150)
+    creditsLabel.Font                   = Enum.Font.Code
+    creditsLabel.Text                   = "Credits to Horror Icey and Reaper"
+    creditsLabel.TextColor3             = Color3.fromRGB(180, 180, 180)
+    creditsLabel.TextSize               = 12
+    creditsLabel.TextXAlignment         = Enum.TextXAlignment.Center
+    creditsLabel.TextYAlignment         = Enum.TextYAlignment.Center
+
+    local keyLabel2 = Instance.new("TextLabel")
+    keyLabel2.Name                   = "KeyLabel"
+    keyLabel2.Parent                 = frame2
+    keyLabel2.BackgroundTransparency = 1
+    keyLabel2.Position               = UDim2.new(0, 29, 0, 200)
+    keyLabel2.Size                   = UDim2.new(0.7, 0, 0.1, 0)
+    keyLabel2.Font                   = Enum.Font.Code
+    keyLabel2.RichText              = true
+    keyLabel2.TextColor3            = Color3.fromRGB(128, 128, 128)
+    keyLabel2.TextSize              = 12
+    keyLabel2.TextXAlignment        = Enum.TextXAlignment.Left
+    keyLabel2.TextYAlignment        = Enum.TextYAlignment.Center
+
+    -- Invisible TextBox to capture typing & paste
+    local inputBox = Instance.new("TextBox")
+    inputBox.Name                   = "InputBox"
+    inputBox.Parent                 = frame2
+    inputBox.BackgroundTransparency = 1
+    inputBox.TextTransparency       = 1
+    inputBox.ClearTextOnFocus       = false
+    inputBox.Text                   = ""
+    inputBox.Font                   = Enum.Font.Code
+    inputBox.TextSize               = 12
+    inputBox.Size                   = keyLabel2.Size
+    inputBox.Position               = keyLabel2.Position
+    inputBox.PlaceholderText        = ""
+
+    -- Player movement lock
+    local player    = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid  = character:WaitForChild("Humanoid")
+    local originalWalkSpeed = humanoid.WalkSpeed
+    local originalJumpPower = humanoid.JumpPower
+
+    -- Auth variables
+    local typedKey         = ""
+    local cursorColor      = Color3.new(1,1,1)
+    local typedKeyColor    = Color3.new(0.5,0.5,0.5)
+    local underlineChar    = "▁"
+    local underlineLen     = 1
+    local blinkSpeed       = 0.5
+    local authDelay        = 3
+    local hideDelay        = 3
+    local showUnderline    = true
+    local canType          = false
+    local isAuthenticating = false
+
+    local keyMap = {
+        Zero="0", One="1", Two="2", Three="3", Four="4", Five="5", Six="6",
+        -- etc...
+    }
+
+    -- Fixed formatLog with proper rgb()
+    local function formatLog(msg)
+        local ts = os.date("%Y-%m-%d %H:%M:%S")
+        return string.format(
+            "[  <font color='rgb(255,0,0)'>%s</font>  ] %s",
+            ts, msg
+        )
+    end
+
+    -- Always‑runnable updateKeyLabel
+    local function updateKeyLabel()
+        local underline = showUnderline and string.rep(underlineChar, underlineLen) or ""
+        keyLabel2.Text = string.format(
+            '[<font color="rgb(255,0,0)">—</font>] Key: '..
+            '<font color="rgb(%d,%d,%d)">%s</font>'..
+            '<font color="rgb(%d,%d,%d)">%s</font>',
+            typedKeyColor.R*255, typedKeyColor.G*255, typedKeyColor.B*255, typedKey,
+            cursorColor.R*255,    cursorColor.G*255,    cursorColor.B*255,    underline
+        )
+    end
+
+    -- Blink cursor
+    task.spawn(function()
+        while true do
+            if not isAuthenticating then
+                showUnderline = not showUnderline
+                updateKeyLabel()
+            end
+            wait(blinkSpeed)
+        end
+    end)
+
+    -- Fade helper
+    local function fadeOutFrame(frame, duration)
+        for _, obj in ipairs(frame:GetDescendants()) do
+            local prop = obj:IsA("Frame") and "BackgroundTransparency"
+                      or obj:IsA("TextLabel") and "TextTransparency"
+                      or obj:IsA("TextButton") and "TextTransparency"
+                      or obj:IsA("ImageLabel") and "ImageTransparency"
+            if prop then
+                TweenService:Create(obj, TweenInfo.new(duration), {[prop] = 1}):Play()
+            end
+        end
+        TweenService:Create(frame, TweenInfo.new(duration), { BackgroundTransparency = 1 }):Play()
+    end
+
+    -- Update on every keystroke or paste
+    inputBox:GetPropertyChangedSignal("Text"):Connect(function()
+        typedKey = inputBox.Text
+        updateKeyLabel()
+    end)
+
+    -- Handle focus events on the hidden TextBox
+    inputBox.Focused:Connect(function()
+        canType = true
+        typedKey = inputBox.Text
+        humanoid.WalkSpeed = 0
+        humanoid.JumpPower = 0
+        updateKeyLabel()
+    end)
+
+    inputBox.FocusLost:Connect(function(enterPressed)
+        canType = false
+        humanoid.WalkSpeed = originalWalkSpeed
+        humanoid.JumpPower = originalJumpPower
+        typedKey = inputBox.Text
+        updateKeyLabel()
+
+        if enterPressed then
+            if typedKey == correctKey then
+                isAuthenticating = true
+                keyLabel2.Text = '[<font color="rgb(255,0,0)">-</font>] Authenticating Your <font color="rgb(255,0,0)">Krylon</font> Key...'
+                wait(authDelay)
+                repeat task.wait() until otherThingLoaded
+                keyLabel2.Text = '[<font color="rgb(255,0,0)">-</font>] Hiding <font color="rgb(255,0,0)">Krylon</font> Console From The Game <font color="rgb(255,0,0)">3.00</font> seconds'
+                wait(hideDelay)
+
+                -- Log sequence
+                local logs = {}
+                local function addLog(m)
+                    table.insert(logs, formatLog(m))
+                    keyLabel2.Text = table.concat(logs, "\n")
+                end
+
+                addLog("PID: "..pid.." Found")
+                wait(1)
+                addLog("Waiting for Your Game To be Loaded.")
+                wait(1)
+                addLog("Your Game is Now Loaded.")
+                wait(3)
+                addLog("Krylon Fully Injected!")
+                wait(1)
+
+                fadeOutFrame(frame2, 2)
+                wait(2)
+                screenGui2:Destroy()
+
+                accessGranted = true
+            else
+                keyLabel2.Text = '[<font color="rgb(255,0,0)">-</font>] Your Krylon Key is Invalid'
+                wait(3)
+                inputBox.Text = ""
+                typedKey = ""
+                updateKeyLabel()
+                canType = true
+                inputBox:CaptureFocus()
+            end
+        end
+    end)
+
+    -- Click to focus/unfocus the hidden TextBox
+    UserInputService.InputBegan:Connect(function(input, processed)
+        if processed then return end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local mpos     = input.Position
+            local kpPos    = keyLabel2.AbsolutePosition
+            local kpSize   = keyLabel2.AbsoluteSize
+            local insideX  = mpos.X >= kpPos.X and mpos.X <= kpPos.X + kpSize.X
+            local insideY  = mpos.Y >= kpPos.Y and mpos.Y <= kpPos.Y + kpSize.Y
+
+            if insideX and insideY then
+                inputBox:CaptureFocus()
+            else
+                if canType then
+                    inputBox:ReleaseFocus()
+                end
+            end
+        end
+    end)
+
+    -- Initialize
+    updateKeyLabel()
+    repeat task.wait() until accessGranted
+
+    -- Signal that the intro is done
+    introFinishedEvent:Fire()
+end
+
+-- Start the console intro
+task.spawn(showConsole)
+
+introFinishedEvent.Event:Connect(function()
+
+
+-- SERVICES
+local Players           = game:GetService("Players")
+local RunService        = game:GetService("RunService")
+local GuiService        = game:GetService("GuiService")
+local Camera            = workspace.CurrentCamera
+local UserInputService  = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Client = Players.LocalPlayer
+local Mouse  = Client:GetMouse()
+
+local Krylon    = getgenv().Krylon
+local SilentAim = Krylon["Silent Aim"]
+local RangeCfg  = Krylon["Range"] or {}
+local silentRange = RangeCfg["Silent Aim"] or math.huge
+
+-- DRAW FOV
+local SilentCircle = Drawing.new("Circle")
+SilentCircle.Thickness    = 1
+SilentCircle.Transparency = 1
+SilentCircle.Color        = Color3.new(1, 1, 1)
+
+RunService.RenderStepped:Connect(function()
+    if not SilentAim or not Mouse then return end
+    local fov = SilentAim.Fov or {}
+    SilentCircle.Visible = fov.Enabled and fov["Show Fov"]
+    if fov.Enabled then
+        SilentCircle.Radius   = math.clamp((fov.Value or 0) * 12, 0, 1000)
+        SilentCircle.Position = Vector2.new(Mouse.X, Mouse.Y + GuiService:GetGuiInset().Y)
+    end
+end)
+
+-- GAME-SPECIFIC SETTINGS (truncated for brevity, use your full table)
+local Games = {
+    DaHood = {
+    ID = 132849360076451,
+    Details = {
+      Name = "Da Hood",
+      Argument = "UpdateMousePosI2",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    DaHoodMacro = {
+    ID = 16033173781,
+    Details = {
+      Name = "Da Hood Macro",
+      Argument = "UpdateMousePosI2",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    DaHoodVC = {
+    ID = 7213786345,
+    Details = {
+      Name = "Da Hood VC",
+      Argument = "UpdateMousePosI",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    HoodCustoms = {
+    ID = 9825515356,
+    Details = {
+      Name = "Hood Customs",
+      Argument = "MousePosUpdate",
+      Remote = "MainEvent"
+    }
+    },
+    HoodModded = {
+    ID = 5602055394,
+    Details = {
+      Name = "Hood Modded",
+      Argument = "MousePos",
+      Remote = "Bullets"
+    }
+    },
+    DaDownhillPSXbox = {
+    ID = 77369032494150,
+    Details = {
+      Name = "Da Downhill [PS/Xbox]",
+      Argument = "MOUSE",
+      Remote = "MAINEVENT"
+    }
+    },
+    DaBank = {
+    ID = 132023669786646,
+    Details = {
+      Name = "Da Bank",
+      Argument = "MOUSE",
+      Remote = "MAINEVENT"
+    }
+    },
+    DaUphill = {
+    ID = 84366677940861,
+    Details = {
+      Name = "Da Uphill",
+      Argument = "MOUSE",
+      Remote = "MAINEVENT"
+    }
+    },
+    DaHoodBotAimTrainer = {
+    ID = 14487637618,
+    Details = {
+      Name = "Da Hood Bot Aim Trainer",
+      Argument = "MOUSE",
+      Remote = "MAINEVENT"
+    }
+    },
+    HoodAimTrainer1v1 = {
+    ID = 11143225577,
+    Details = {
+      Name = "1v1 Hood Aim Trainer",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent"
+    }
+    },
+    HoodAim = {
+    ID = 14413712255,
+    Details = {
+      Name = "Hood Aim",
+      Argument = "MOUSE",
+      Remote = "MAINEVENT"
+    }
+    },
+    MoonHood = {
+    ID = 14472848239,
+    Details = {
+      Name = "Moon Hood",
+      Argument = "MoonUpdateMousePos",
+      Remote = "MainEvent"
+    }
+    },
+    DaStrike = {
+    ID = 15186202290,
+    Details = {
+      Name = "Da Strike",
+      Argument = "MOUSE",
+      Remote = "MAINEVENT"
+    }
+    },
+    OGDaHood = {
+    ID = 17319408836,
+    Details = {
+      Name = "OG Da Hood",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    DahAimTrainner = {
+    ID = 12804651854,
+    Details = {
+      Name = "DahAimTrainner",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    MekoHood = {
+    ID = 17780567699,
+    Details = {
+      Name = "Meko Hood",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    DaCraft = {
+    ID = 128258288926907,
+    Details = {
+      Name = "Da Craft",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    NewHood = {
+    ID = 17809101348,
+    Details = {
+      Name = "New Hood",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    NewHood2 = {
+    ID = 99991590066512,
+    Details = {
+      Name = "New Hood",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    MayHood = {
+    ID = 77852114927492,
+    Details = {
+      Name = "may Hood",
+      Argument = "UpdateMousePosI2",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    DeeHood = {
+    ID = 102372656720272,
+    Details = {
+      Name = "Dee Hood",
+      Argument = "UpdateMousePosI",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    DerHood = {
+    ID = 138293393214382,
+    Details = {
+      Name = "Der Hood",
+      Argument = "DERHOODMOUSEPOS666^",
+      Remote = "MainRemoteEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    ARhood = {
+    ID = 98930372136494,
+    Details = {
+      Name = "AR hood",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    OGDahood = {
+    ID = 76565633209271,
+    Details = {
+      Name = "OG da hood",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    DelHoodAim = {
+    ID = 88582222971530,
+    Details = {
+      Name = "Del Hood Aim",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    },
+    DaKitty = {
+    ID = 113357850268933,
+    Details = {
+      Name = "Da kitty",
+      Argument = "UpdateMousePos",
+      Remote = "MainEvent",
+      BodyEffects = "K.O"
+    }
+    }
+    }
+
+local gameSettings
+for _, gameData in pairs(Games) do
+    if gameData.ID == game.PlaceId then
+        gameSettings = gameData.Details
+        break
+    end
+end
+
+if not gameSettings then
+    Client:Kick("Unsupported game.")
+    return
+end
+
+local RemoteEventName = gameSettings.Remote or "MainEvent"
+local RemoteArgument  = gameSettings.Argument or "UpdateMousePos"
+local MainEvent       = ReplicatedStorage:FindFirstChild(RemoteEventName)
+if not MainEvent then
+    Client:Kick("Remote not found")
+    return
+end
+
+-- UTILITIES
+local function hasCheck(name)
+    for _, v in ipairs(SilentAim.Checks or {}) do
+        if tostring(v):lower() == name:lower() then
+            return true
+        end
+    end
+    return false
+end
+
+local function WallCheck(pos, ignoreList)
+    if hasCheck("Wall") then
+        local origin = Camera.CFrame.Position
+        local dir = pos - origin
+        return workspace:FindPartOnRayWithIgnoreList(Ray.new(origin, dir.Unit * dir.Magnitude), ignoreList) == nil
+    end
+    return true
+end
+
+local function CustomChecks(plr)
+    local ch = plr.Character
+    if not ch then return false end
+
+    if hasCheck("Knocked") then
+        local ko = ch:FindFirstChild("BodyEffects")
+        if ko and ko:FindFirstChild("K.O") and ko["K.O"].Value then
+            return false
+        end
+    end
+
+    if hasCheck("Grabbed") then
+        local g = ch:FindFirstChild("Grabbed")
+        if g and g.Value then
+            return false
+        end
+    end
+
+    if hasCheck("Vehicle") then
+        if ch:FindFirstChildOfClass("VehicleSeat") then
+            return false
+        end
+    end
+
+    return true
+end
+
+-- TARGETING
+local function GetClosest()
+    local best, tgt = math.huge, nil
+    local camPos = Camera.CFrame.Position
+
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= Client and plr.Character then
+            local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
+            if hrp and (hrp.Position - camPos).Magnitude <= silentRange then
+                local p2, onScreen = Camera:WorldToScreenPoint(hrp.Position)
+                local screenPos = Vector2.new(p2.X, p2.Y + GuiService:GetGuiInset().Y)
+                local mousePos  = Vector2.new(Mouse.X, Mouse.Y + GuiService:GetGuiInset().Y)
+                local dist2D    = (screenPos - mousePos).Magnitude
+
+                if onScreen and dist2D <= ((SilentAim.Fov.Value or 0) * 12) and dist2D < best and
+                   WallCheck(hrp.Position, {Client.Character, plr.Character}) and CustomChecks(plr) then
+                    best, tgt = dist2D, plr
+                end
+            end
+        end
+    end
+    return tgt
+end
+
+local function PredictPos(plr)
+    if not plr or not plr.Character then return nil end
+    local parts = SilentAim["Hit Location"].Parts or {}
+    local hitType = SilentAim["Hit Location"].Type or "Closest Part"
+    local camPos = Camera.CFrame.Position
+    local mousePos = Vector2.new(Mouse.X, Mouse.Y + GuiService:GetGuiInset().Y)
+    local bestPart, bestDistance = nil, math.huge
+    local bestPoint = nil
+
+    for _, partName in ipairs(parts) do
+        local part = plr.Character:FindFirstChild(partName)
+        if part and part:IsA("BasePart") then
+            if hitType == "Closest Part" then
+                local screenPos, onScreen = Camera:WorldToScreenPoint(part.Position)
+                local screenVector = Vector2.new(screenPos.X, screenPos.Y + GuiService:GetGuiInset().Y)
+                local dist = (screenVector - mousePos).Magnitude
+                if onScreen and dist < bestDistance then
+                    bestPart = part
+                    bestDistance = dist
+                end
+            elseif hitType == "Closest Point" then
+                -- For Closest Point mode, you could sample several points on the part's surface.
+                -- Here, simplified to part center for example purposes.
+                local screenPos, onScreen = Camera:WorldToScreenPoint(part.Position)
+                local screenVector = Vector2.new(screenPos.X, screenPos.Y + GuiService:GetGuiInset().Y)
+                local dist = (screenVector - mousePos).Magnitude
+                if onScreen and dist < bestDistance then
+                    bestPoint = part.Position
+                    bestDistance = dist
+                end
+            end
+        end
+    end
+
+    local predictionLevel = SilentAim.Prediction.Level or { "Low", "Medium", "High", "Extreme" }
+    local predictionValue = SilentAim.Prediction.Sets[predictionLevel] or 0
+
+    if bestPart and hitType == "Closest Part" then
+        -- Predict position based on velocity and prediction value
+        if bestPart.Velocity then
+            return bestPart.Position + bestPart.Velocity * predictionValue
+        else
+            return bestPart.Position
+        end
+    elseif bestPoint and hitType == "Closest Point" then
+        return bestPoint
+    end
+
+    return nil
+end
+
+-- HOOK MOUSE.Hit
+if not getgenv().__SilentHooked then
+    getgenv().__SilentHooked = true
+    local mt = getrawmetatable(game)
+    local old = mt.__index
+    setreadonly(mt, false)
+    mt.__index = newcclosure(function(self, k)
+        if self == Mouse and k == "Hit" then
+            if SilentAim.Enabled then
+                local pl = GetClosest()
+                if pl then
+                    local pos = PredictPos(pl)
+                    if pos then
+                        MainEvent:FireServer(RemoteArgument, pos)
+                        return CFrame.new(pos)
+                    end
+                end
+            end
+        end
+        return old(self, k)
+    end)
+    setreadonly(mt, true)
+end
+
+-- TOGGLE KEYBIND
+UserInputService.InputBegan:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode == Enum.KeyCode[SilentAim.Keybind] then
+        SilentAim.Enabled = not SilentAim.Enabled
+    end
+end)
+
+
+local cfg        = getgenv().Krylon
+local tbCfg      = cfg["Trigger bot"]
+local rangeCfg   = cfg.Range["Trigger bot"]
+
+local Players          = game:GetService("Players")
+local RunService       = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Camera           = workspace.CurrentCamera
+local LocalPlayer      = Players.LocalPlayer
+
+-- Mouse helper: returns screen-pixel Vector2
+local function getMousePos()
+    return UserInputService:GetMouseLocation()
+end
+
+-- FOV circle
+local Circle = Drawing.new("Circle")
+Circle.Visible      = false
+Circle.Transparency = 0
+Circle.Color        = Color3.new(1,1,1)
+Circle.Filled       = false
+
+-- Keyboard bind only
+local bindKey = Enum.KeyCode[tbCfg.Keybind.Bind:upper()]
+local isToggle = tbCfg.Keybind["Keybind Mode"]:lower() == "toggle"
+local holding = false
+if isToggle and tbCfg.Enabled == nil then
+    tbCfg.Enabled = false
+end
+
+-- Input handlers
+UserInputService.InputBegan:Connect(function(inp, gp)
+    if gp then return end
+    if inp.KeyCode ~= bindKey then return end
+
+    if isToggle then
+        tbCfg.Enabled = not tbCfg.Enabled
+    else
+        holding = true
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(inp)
+    if inp.KeyCode == bindKey and not isToggle then
+        holding = false
+    end
+end)
+
+local function isActive()
+    return isToggle and tbCfg.Enabled or holding
+end
+
+-- Knocked check
+local function isKnocked(plr)
+    if not plr.Character then return true end
+    local tag = plr.Character:FindFirstChild("BodyEffects")
+    local knocked = tag and tag:FindFirstChild("K.O")
+    return knocked and knocked.Value
+end
+
+-- Simple LOS check
+local function WallCheck(part)
+    local origin = Camera.CFrame.Position
+    local dir    = part.Position - origin
+    local params = RaycastParams.new()
+    params.FilterDescendantsInstances = {LocalPlayer.Character, Camera}
+    params.FilterType = Enum.RaycastFilterType.Blacklist
+    params.IgnoreWater = true
+    local hit = workspace:Raycast(origin, dir, params)
+    return not (hit and not hit.Instance:IsDescendantOf(part.Parent))
+end
+
+-- Find target
+local function GetTarget()
+    local bestDist = math.huge
+    local tgt, tgtPart
+    local useFOV = tbCfg["Custom Size"].Enabled
+    local mousePos = getMousePos()
+
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and not isKnocked(plr) then
+            local char = plr.Character
+            local pos
+
+            if useFOV then
+                -- Use the humanoid root part with prediction offset
+                pos = char.HumanoidRootPart.Position + Vector3.new(tbCfg.Prediction, tbCfg.Prediction, tbCfg.Prediction)
+                local sp, on = Camera:WorldToScreenPoint(pos)
+                if not on or (Vector2.new(sp.X, sp.Y) - mousePos).Magnitude > Circle.Radius then
+                    continue
+                end
+            else
+                -- Find closest hit part within 20 px of mouse
+                for _, limb in ipairs(tbCfg.HitParts.Parts) do
+                    local part = char:FindFirstChild(limb)
+                    if part and part:IsA("BasePart") and part.Transparency < 1 then
+                        local sp, on = Camera:WorldToScreenPoint(part.Position)
+                        if on and (Vector2.new(sp.X, sp.Y) - mousePos).Magnitude <= 20 then
+                            pos = part.Position
+                            break
+                        end
+                    end
+                end
+                if not pos then continue end
+            end
+
+            if cfg.Range.Enabled and rangeCfg and (Camera.CFrame.Position - pos).Magnitude > rangeCfg then
+                continue
+            end
+
+            local rayPart = useFOV and char.HumanoidRootPart or char:FindFirstChildWhichIsA("BasePart")
+            if not WallCheck(rayPart or char.HumanoidRootPart) then
+                continue
+            end
+
+            local score = useFOV 
+                and (Vector2.new(Camera:WorldToScreenPoint(pos)) - mousePos).Magnitude
+                or (Camera.CFrame.Position - pos).Magnitude
+
+            if score < bestDist then
+                bestDist = score
+                tgt, tgtPart = plr, rayPart
+            end
+        end
+    end
+
+    return tgt, tgtPart
+end
+
+-- Setup FOV circle if enabled (initial setup)
+if tbCfg["Custom Size"].Enabled then
+    Circle.Radius   = tbCfg["Custom Size"].Value * 12
+    Circle.NumSides = math.max(12, Circle.Radius * 2)
+    Circle.Visible  = true
+end
+
+local lastShot = tick()
+RunService.Heartbeat:Connect(function()
+    if not isActive() then
+        Circle.Visible = false
+        return
+    end
+
+    if tbCfg["Custom Size"].Enabled then
+        local mousePos = getMousePos()
+        Circle.Position = mousePos
+        Circle.Radius   = tbCfg["Custom Size"].Value * 12
+        Circle.Visible  = true
+    else
+        Circle.Visible = false
+    end
+
+    local plr, part = GetTarget()
+    if not plr or not part then return end
+    if tick() - lastShot < tbCfg.Delay.Value then return end
+
+    local tool = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool")
+    if not tool or not tool:FindFirstChild("Handle") then return end
+
+    local function clean(s) return s:lower():gsub("[%[%]%s%-]", "") end
+    local allowed = false
+    for _, w in ipairs(tbCfg.Weapons) do
+        if clean(tool.Name):find(clean(w), 1, true) then
+            allowed = true
+            break
+        end
+    end
+    if not allowed then return end
+
+    tool:Activate()
+    lastShot = tick()
+end)
+
+
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local opts = getgenv().Krylon["Speed Modifications"].Options
+
+-- State variables
+local speed = opts.DefaultSpeed
+local toggledOn = false
+local originalSpeed = nil
+local humanoid = nil
+
+-- Apply or revert speed based on toggle mode / state
+local function applySpeed()
+    if not humanoid then return end
+
+    if opts.ToggleMode then
+        if toggledOn then
+            humanoid.WalkSpeed = speed
+        else
+            humanoid.WalkSpeed = originalSpeed
+        end
+    else
+        humanoid.WalkSpeed = speed
+    end
+end
+
+-- Handle character load
+local function onCharacterAdded(char)
+    humanoid = char:WaitForChild("Humanoid")
+    originalSpeed = humanoid.WalkSpeed
+
+    -- If toggle mode is off, always apply speed
+    if opts.Enabled and not opts.ToggleMode then
+        toggledOn = true
+        humanoid.WalkSpeed = speed
+    end
+end
+
+-- Connect to current character and future respawns
+if player.Character then
+    onCharacterAdded(player.Character)
+end
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Input handling
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed or not opts.Enabled then return end
+    if not humanoid then return end
+
+    local kc = input.KeyCode.Name
+
+    -- Toggle movement on/off
+    if opts.ToggleMode and kc == opts.Keybinds.ToggleMovement then
+        toggledOn = not toggledOn  
+        applySpeed()
+        return
+    end
+
+    -- Increase speed
+    if kc == opts.Keybinds["Speed +5"] then
+        speed = speed + 5
+        applySpeed()
+        return
+    end
+
+    -- Decrease speed
+    if kc == opts.Keybinds["Speed -5"] then
+        speed = math.max(0, speed - 5)
+        applySpeed()
+        return
+    end
+end)
+
+-- Maintain speed in case something overrides it
+RunService.Heartbeat:Connect(function()
+    if opts.Enabled and humanoid then
+        if (opts.ToggleMode and toggledOn) or not opts.ToggleMode then
+            if humanoid.WalkSpeed ~= speed then
+                humanoid.WalkSpeed = speed
+            end
+        end
+    end
+end)
+
+-- Services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+
+-- Local player
+local LocalPlayer = Players.LocalPlayer
+local Camera = Workspace.CurrentCamera
+local LocalCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local LocalRootPart = LocalCharacter:WaitForChild("HumanoidRootPart")
+
+-- Settings from getgenv()
+local Camlock = getgenv().Krylon['Camlock']
+local FOV = Camlock.Fov * 12
+local ShowFov = Camlock['Show Fov']
+local Key = Enum.KeyCode[Camlock.Keybind]
+local PredictionSet = Camlock.Prediction
+local HitLocationType = Camlock['Hit Location'].Type
+local HitParts = Camlock['Hit Location'].Parts
+local Checks = Camlock.Checks
+
+-- Range settings
+local RangeSettings = getgenv().Krylon['Range']
+local RangeEnabled = RangeSettings.Enabled
+local MaxCamlockRange = RangeSettings['Camlock']
+
+-- Internal state
+local Target = nil
+local CamlockEnabled = false
+
+-- Raycast setup
+local rayParams = RaycastParams.new()
+rayParams.FilterType = Enum.RaycastFilterType.Blacklist
+rayParams.IgnoreWater = true
+
+-- FOV Circle
+local FOVCircle
+if FOV and FOV > 0 and ShowFov then
+    FOVCircle = Drawing.new("Circle")
+    FOVCircle.Color = Color3.fromRGB(255, 255, 255)
+    FOVCircle.Thickness = 1
+    FOVCircle.Transparency = 0.3
+    FOVCircle.Filled = false
+end
+
+-- Utility Checks
+local function isObstructed(targetPos)
+    if not LocalRootPart then return true end
+    rayParams.FilterDescendantsInstances = {LocalCharacter}
+    local direction = (targetPos - LocalRootPart.Position)
+    local result = Workspace:Raycast(LocalRootPart.Position, direction, rayParams)
+    return result and result.Instance and result.Instance.CanCollide
+end
+
+local function isKnocked(plr)
+    local char = plr.Character
+    if not char then return true end
+    local tag = char:FindFirstChild("BodyEffects")
+    local knocked = tag and tag:FindFirstChild("K.O")
+    return knocked and knocked.Value == true
+end
+
+local function isGrabbed(plr)
+    return plr.Character and plr.Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+end
+
+local function isInVehicle(plr)
+    return plr.Character and plr.Character:FindFirstChild("SeatWeld") ~= nil
+end
+
+local function isInRange(player)
+    if not player.Character then return false end
+    local targetRoot = player.Character:FindFirstChild("HumanoidRootPart")
+    if not LocalRootPart or not targetRoot then return false end
+    local distance = (targetRoot.Position - LocalRootPart.Position).Magnitude
+    return distance <= MaxCamlockRange
+end
+
+local function isValidTarget(player)
+    if not player.Character or player == LocalPlayer then return false end
+    local humanoid = player.Character:FindFirstChildWhichIsA("Humanoid")
+    if not humanoid or humanoid.Health <= 0 then return false end
+
+    if RangeEnabled and not isInRange(player) then return false end
+
+    if table.find(Checks, "Wall") then
+        local part = player.Character:FindFirstChild("HumanoidRootPart")
+        if part and isObstructed(part.Position) then return false end
+    end
+    if table.find(Checks, "Knocked") and isKnocked(player) then return false end
+    if table.find(Checks, "Grabbed") and isGrabbed(player) then return false end
+    if table.find(Checks, "Vehicle") and isInVehicle(player) then return false end
+
+    return true
+end
+
+local function getClosestTarget()
+    local closestPlayer = nil
+    local shortestDistance = FOV
+
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if isValidTarget(plr) then
+            local char = plr.Character
+            for _, partName in ipairs(HitParts) do
+                local part = char:FindFirstChild(partName)
+                if part then
+                    local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
+                    if onScreen then
+                        local dist = (Vector2.new(screenPos.X, screenPos.Y) - UserInputService:GetMouseLocation()).Magnitude
+                        if dist < shortestDistance then
+                            closestPlayer = plr
+                            shortestDistance = dist
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return closestPlayer
+end
+
+local function getHitPart(player)
+    local char = player.Character
+    local closestPart, closestDist = nil, math.huge
+
+    for _, partName in ipairs(HitParts) do
+        local part = char:FindFirstChild(partName)
+        if part then
+            local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
+            if onScreen then
+                local dist = (Vector2.new(screenPos.X, screenPos.Y) - UserInputService:GetMouseLocation()).Magnitude
+                if dist < closestDist then
+                    closestPart = part
+                    closestDist = dist
+                end
+            end
+        end
+    end
+    return closestPart
+end
+
+-- Input: Toggle Camlock
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Key then
+        CamlockEnabled = not CamlockEnabled
+        if not CamlockEnabled then Target = nil end
+    end
+end)
+
+-- Main Camlock loop
+RunService.RenderStepped:Connect(function()
+    if not Camlock.Enabled then return end
+
+    if FOVCircle then
+        FOVCircle.Position = UserInputService:GetMouseLocation()
+        FOVCircle.Radius = FOV
+        FOVCircle.Visible = Camlock['Show Fov']
+    end
+
+    if CamlockEnabled then
+        if not Target or not isValidTarget(Target) then
+            Target = getClosestTarget()
+        end
+
+        if Target and isValidTarget(Target) then
+            local hitPart = getHitPart(Target)
+            if hitPart then
+                local prediction = PredictionSet.Medium -- could be dynamic by ping
+                local predictedPosition = hitPart.Position + (hitPart.Velocity * prediction)
+
+                local origin = Camera.CFrame.Position
+                local direction = (predictedPosition - origin).Unit
+                local desiredCFrame = CFrame.new(origin, origin + direction)
+
+                Camera.CFrame = Camera.CFrame:Lerp(desiredCFrame, Camlock.Value.Snappiness)
+            end
+        end
+    end
+end)
+
+
+end)
