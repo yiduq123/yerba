@@ -15,7 +15,7 @@ getgenv().Krylon = {
         ['Fov'] = {
             ['Enabled'] = true,
                 ['Value'] = 7,
-                ['Show Fov'] = true,
+                ['Show Fov'] = false,
         },
         ['Prediction'] = {
             ['Sets'] = {
