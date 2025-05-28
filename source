@@ -95,7 +95,7 @@ getgenv().Krylon = {
         },
         ['Custom Size'] = {
             ['Enabled'] = true, 
-            ['Value'] = 7
+            ['Value'] = 3
         },
     },
     ['Range'] = {
