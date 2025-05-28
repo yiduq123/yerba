@@ -1,4 +1,4 @@
-
+script_key = "TosUAkAOlASMrFOCIVDZbXDsLCqLMgPi"; -- add ur key here
 
 getgenv().Krylon = {
     ['Core'] = {
